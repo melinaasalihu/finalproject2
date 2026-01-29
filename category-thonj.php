@@ -33,6 +33,27 @@ get_header(); ?>
         </div>
     </div>
 
+    <!-- Gallery Section -->
+    <div style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); padding: 50px 20px; margin: 40px 0; border-radius: 12px;">
+        <h2 class="section-title" style="text-align: center; color: #b5838d;">📸 Galeria e Punimeve Tona</h2>
+        <div class="services-grid" style="margin-top: 30px;">
+            <?php
+            $nails_images = array('french.jpg', 'gishta.jpg', 'nails.jpg', 'thoj.jpg');
+            foreach ($nails_images as $image) {
+                $image_path = home_url('/wp-content/themes/finalproject/finalproject/nails/' . $image);
+                $image_name = ucfirst(str_replace('.jpg', '', $image));
+                echo '<div class="service-card" style="overflow: hidden; border: 2px solid rgba(255,255,255,0.8);">';
+                echo '<img src="' . esc_url($image_path) . '" alt="' . esc_attr($image) . '" style="width: 100%; height: 280px; object-fit: cover; border-radius: 10px 10px 0 0; transition: 0.3s;" />';
+                echo '<div class="p-3" style="text-align: center; background: white;">';
+                echo '<h4 style="color: #b5838d; margin: 10px 0;">💅 ' . $image_name . '</h4>';
+                echo '<p style="color: #666; font-size: 0.9rem; margin: 5px 0;">Dizajn profesional me produkte cilësore</p>';
+                echo '</div>';
+                echo '</div>';
+            }
+            ?>
+        </div>
+    </div>
+
     <div style="border-top: 2px solid #eee; padding-top: 40px;">
         <h2 class="section-title">Shërbime të Disponueshme</h2>
         <div class="services-grid">
@@ -55,11 +76,15 @@ get_header(); ?>
             if ($services->have_posts()) :
                 while ($services->have_posts()) : $services->the_post(); ?>
                     <div class="service-card">
-                        <?php if(has_post_thumbnail()) the_post_thumbnail('salon-medium'); ?>
+                        <?php if(has_post_thumbnail()) { 
+                            the_post_thumbnail('salon-medium', array('style' => 'width: 100%; height: 250px; object-fit: cover;'));
+                        } else {
+                            echo '<div style="width: 100%; height: 250px; background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); display: flex; align-items: center; justify-content: center; color: #b5838d; font-size: 3rem;">💅</div>';
+                        } ?>
                         <div class="p-3">
                             <h3><?php the_title(); ?></h3>
                             <?php the_excerpt(); ?>
-                            <a href="<?php the_permalink(); ?>" class="btn-gold">Shiko Detajet</a>
+                            <a href="<?php the_permalink(); ?>" class="btn-gold" style="display: inline-block; padding: 8px 15px; background: var(--gold); color: white; text-decoration: none; border-radius: 5px;">Shiko Detajet</a>
                         </div>
                     </div>
                 <?php endwhile;

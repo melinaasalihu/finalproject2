@@ -41,6 +41,7 @@
                                     <a href="<?php the_permalink(); ?>" style="color: var(--gold); text-decoration: none; font-weight: 600; transition: 0.3s;">
                                         Shiko Më Shumë →
                                     </a>
+                                    <?php edit_post_link(__('(Redakto)'), '<span style="color: #999; font-size: 0.9rem;">', '</span>'); ?>
                                 </div>
                             </div>
                         </div>

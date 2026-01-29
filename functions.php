@@ -6,6 +6,8 @@ function beauty_salon_setup() {
     add_theme_support('custom-logo');
     add_theme_support('responsive-embeds');
     add_theme_support('html5', array('search-form', 'comment-form', 'comment-list', 'gallery', 'caption'));
+    add_theme_support('post-formats', array('aside', 'gallery', 'link', 'image', 'quote', 'video', 'audio'));
+    add_theme_support('menus');
     
     register_nav_menus(array(
         'primary' => 'Menuja Kryesore',
@@ -29,6 +31,17 @@ function beauty_salon_assets() {
 }
 add_action('wp_enqueue_scripts', 'beauty_salon_assets');
 
+// Handle page templates
+add_filter('page_template', function($template) {
+    if (is_page('nails')) {
+        $custom_template = get_template_directory() . '/nails.php';
+        if (file_exists($custom_template)) {
+            return $custom_template;
+        }
+    }
+    return $template;
+});
+
 // Register CPT and Taxonomy
 function register_beauty_features() {
     register_post_type('sherbimet', array(
@@ -44,7 +57,7 @@ function register_beauty_features() {
         'public' => true,
         'has_archive' => true,
         'menu_icon' => 'dashicons-admin-appearance',
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'tags'),
         'rewrite' => array('slug' => 'sherbimet'),
         'show_in_rest' => true,
     ));
@@ -63,6 +76,71 @@ function register_beauty_features() {
     ));
 }
 add_action('init', 'register_beauty_features');
+
+// Create Nails page automatically
+add_action('wp_loaded', function() {
+    // Only for non-admin pages to avoid issues
+    if (is_admin()) return;
+    
+    // Check if page exists
+    $existing = get_posts(array(
+        'post_name' => 'nails',
+        'post_type' => 'page',
+        'numberposts' => 1
+    ));
+    
+    // If not exists, create it
+    if (empty($existing)) {
+        wp_insert_post(array(
+            'post_type' => 'page',
+            'post_title' => 'Thonj',
+            'post_name' => 'nails',
+            'post_content' => 'Gallery e punimeve tona të nails',
+            'post_status' => 'publish',
+            'post_author' => 1
+        ), false);
+    }
+});
+
+// Flush rewrite rules on theme activation
+function beauty_salon_flush_rewrite_rules() {
+    beauty_salon_setup();
+    register_beauty_features();
+    
+    // Create default categories if they don't exist
+    $categories = array(
+        'thonj' => array('name' => 'Thonj', 'description' => 'Shërbime të thongjeve'),
+        'floke' => array('name' => 'Flokë', 'description' => 'Shërbime të flokëve'),
+        'makeup' => array('name' => 'Makeup', 'description' => 'Shërbime të makeup-it'),
+        'skincare' => array('name' => 'Skincare', 'description' => 'Shërbime të kujdesit të lëkurës')
+    );
+    
+    foreach ($categories as $slug => $data) {
+        if (!term_exists($slug, 'kategoria_sherbimit')) {
+            wp_insert_term($data['name'], 'kategoria_sherbimit', array(
+                'slug' => $slug,
+                'description' => $data['description']
+            ));
+        }
+    }
+    
+    // Create Nails page with template
+    if (!get_page_by_path('nails', OBJECT, 'page')) {
+        wp_insert_post(array(
+            'post_title' => 'Thonj',
+            'post_content' => 'Përvojat më të bukura të thongjeve',
+            'post_type' => 'page',
+            'post_name' => 'nails',
+            'post_status' => 'publish',
+            'page_template' => 'nails.php'
+        ));
+    }
+    
+    flush_rewrite_rules();
+}
+add_action('after_switch_theme', 'beauty_salon_flush_rewrite_rules');
+
+
 
 // Custom Pagination
 function beauty_salon_pagination() {

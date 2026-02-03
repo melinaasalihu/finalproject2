@@ -6,12 +6,7 @@
 get_header(); ?>
 
 <!-- Hero Section -->
-<section class="hero-banner">
-    <div class="container">
-        <h1><?php bloginfo('name'); ?></h1>
-        <p class="lead"><?php bloginfo('description'); ?></p>
-    </div>
-</section>
+
 
 <!-- About Section -->
 <section class="about-section">
@@ -40,8 +35,8 @@ get_header(); ?>
             foreach ($categories as $slug => $data) {
                 $link = home_url($data['url']); 
                 ?>
-                <a href="<?php echo esc_url($link); ?>" class="dash-item <?php echo esc_attr($data['color']); ?>">
-                    <span class="dash-icon"><?php echo $data['icon']; ?></span>
+                <a href="<?php echo esc_url($link); ?>" class="dash-item <?php echo esc_attr($data['color']); ?>" role="button" aria-label="<?php echo esc_attr($data['titulli']); ?>">
+                    <span class="dash-icon" aria-hidden="true"><?php echo $data['icon']; ?></span>
                     <h3><?php echo esc_html($data['titulli']); ?></h3>
                     <p>Kliko për shërbimet</p>
                 </a>
@@ -67,11 +62,19 @@ get_header(); ?>
             if ($featured_services->have_posts()) :
                 while ($featured_services->have_posts()) : $featured_services->the_post(); ?>
                     <div class="service-card">
-                        <?php if(has_post_thumbnail()) the_post_thumbnail('salon-medium'); ?>
-                        <div class="p-3">
+                        <div class="card-img">
+                            <?php 
+                            if(has_post_thumbnail()) {
+                                the_post_thumbnail('salon-medium', array('alt' => get_the_title()));
+                            } else {
+                                echo '<img src="' . esc_url(get_template_directory_uri()) . '/images/placeholder.png" alt="' . esc_attr(get_the_title()) . '" />';
+                            }
+                            ?>
+                        </div>
+                        <div class="card-text">
                             <h3><?php the_title(); ?></h3>
                             <?php the_excerpt(); ?>
-                            <a href="<?php the_permalink(); ?>" class="btn-gold">Shiko Detajet</a>
+                            <a href="<?php the_permalink(); ?>" class="read-more">Shiko Detajet →</a>
                         </div>
                     </div>
                 <?php endwhile;
@@ -87,54 +90,42 @@ get_header(); ?>
 <section style="padding: 60px 20px; background: white;">
     <div class="container">
         <h2 class="section-title">Përvojat e Klientëve Tanë</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px;">
-            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 4px solid var(--gold);">
-                <div style="display: flex; margin-bottom: 15px;">
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="stars">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
-                <p style="color: #666; line-height: 1.6; margin: 15px 0; font-style: italic;">
+                <p class="testimonial-text">
                     "Shërbim i mahnitshëm! Stafi ishte shumë profesional dhe i vëmendshëm ndaj kërkesave të mia."
                 </p>
-                <p style="font-weight: 600; color: var(--dark); margin: 10px 0 0 0;">Fatima H.</p>
-                <p style="color: #999; margin: 5px 0 0 0; font-size: 0.9rem;">Shërbimi i Flokëve</p>
+                <p class="testimonial-name">Fatima H.</p>
+                <p class="testimonial-service">Shërbimi i Flokëve</p>
             </div>
 
-            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 4px solid var(--gold);">
-                <div style="display: flex; margin-bottom: 15px;">
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
+            <div class="testimonial-card">
+                <div class="stars">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
-                <p style="color: #666; line-height: 1.6; margin: 15px 0; font-style: italic;">
+                <p class="testimonial-text">
                     "Makiazhi për dasmën time ishte absolutisht perfekt! Nuk mund ta përshkruaj mirë."
                 </p>
-                <p style="font-weight: 600; color: var(--dark); margin: 10px 0 0 0;">Drina L.</p>
-                <p style="color: #999; margin: 5px 0 0 0; font-size: 0.9rem;">Shërbimi i Makeup</p>
+                <p class="testimonial-name">Drina L.</p>
+                <p class="testimonial-service">Shërbimi i Makeup</p>
             </div>
 
-            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 4px solid var(--gold);">
-                <div style="display: flex; margin-bottom: 15px;">
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
-                    <span style="color: var(--gold); font-size: 1.1rem;">★</span>
+            <div class="testimonial-card">
+                <div class="stars">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
-                <p style="color: #666; line-height: 1.6; margin: 15px 0; font-style: italic;">
+                <p class="testimonial-text">
                     "Trajtimi i lëkurës ishte shumë relaksues. Lëkura ime duket më e shëndetshme se kurrë!"
                 </p>
-                <p style="font-weight: 600; color: var(--dark); margin: 10px 0 0 0;">Lindita M.</p>
-                <p style="color: #999; margin: 5px 0 0 0; font-size: 0.9rem;">Shërbimi i Skincare</p>
+                <p class="testimonial-name">Lindita M.</p>
+                <p class="testimonial-service">Shërbimi i Skincare</p>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 40px;">
-            <a href="<?php echo home_url('/testimonials'); ?>" class="btn-gold" style="padding: 10px 25px; display: inline-block;">Shiko Më Shumë Përmendore</a>
+        <div class="testimonials-link">
+            <a href="<?php echo home_url('/testimonials'); ?>" class="btn-gold">Shiko Më Shumë Përmendore</a>
         </div>
     </div>
 </section>

@@ -31,14 +31,28 @@ function beauty_salon_assets() {
 }
 add_action('wp_enqueue_scripts', 'beauty_salon_assets');
 
-// Handle page templates
+// Handle page templates - Auto-assign templates based on page slug
 add_filter('page_template', function($template) {
-    if (is_page('nails')) {
-        $custom_template = get_template_directory() . '/nails.php';
+    $page = get_queried_object();
+    
+    if (!is_page()) return $template;
+    
+    $page_slug = $page->post_name;
+    $templates = array(
+        'nails' => 'nails.php',
+        'floke' => 'floke.php',
+        'makeup' => 'makeup.php',
+        'skincare' => 'skincare.php',
+        'contact' => 'template-contact.php'
+    );
+    
+    if (isset($templates[$page_slug])) {
+        $custom_template = get_template_directory() . '/' . $templates[$page_slug];
         if (file_exists($custom_template)) {
             return $custom_template;
         }
     }
+    
     return $template;
 });
 
@@ -62,6 +76,7 @@ function register_beauty_features() {
         'show_in_rest' => true,
     ));
 
+    // Register Taxonomy with proper archive support
     register_taxonomy('kategoria_sherbimit', 'sherbimet', array(
         'labels' => array(
             'name' => 'Kategoritë',
@@ -71,43 +86,22 @@ function register_beauty_features() {
         ),
         'hierarchical' => true,
         'show_admin_column' => true,
-        'rewrite' => array('slug' => 'lloj-sherbimi'),
+        'public' => true,
+        'has_archive' => true,
+        'rewrite' => array(
+            'slug' => 'lloj-sherbimi',
+            'with_front' => false,
+            'hierarchical' => true
+        ),
         'show_in_rest' => true,
     ));
 }
 add_action('init', 'register_beauty_features');
 
-// Create Nails page automatically
+// Ensure categories exist and flush rewrite rules
 add_action('wp_loaded', function() {
-    // Only for non-admin pages to avoid issues
-    if (is_admin()) return;
+    $rewrite_needed = false;
     
-    // Check if page exists
-    $existing = get_posts(array(
-        'post_name' => 'nails',
-        'post_type' => 'page',
-        'numberposts' => 1
-    ));
-    
-    // If not exists, create it
-    if (empty($existing)) {
-        wp_insert_post(array(
-            'post_type' => 'page',
-            'post_title' => 'Thonj',
-            'post_name' => 'nails',
-            'post_content' => 'Gallery e punimeve tona të nails',
-            'post_status' => 'publish',
-            'post_author' => 1
-        ), false);
-    }
-});
-
-// Flush rewrite rules on theme activation
-function beauty_salon_flush_rewrite_rules() {
-    beauty_salon_setup();
-    register_beauty_features();
-    
-    // Create default categories if they don't exist
     $categories = array(
         'thonj' => array('name' => 'Thonj', 'description' => 'Shërbime të thongjeve'),
         'floke' => array('name' => 'Flokë', 'description' => 'Shërbime të flokëve'),
@@ -121,24 +115,38 @@ function beauty_salon_flush_rewrite_rules() {
                 'slug' => $slug,
                 'description' => $data['description']
             ));
+            $rewrite_needed = true;
         }
     }
     
-    // Create Nails page with template
-    if (!get_page_by_path('nails', OBJECT, 'page')) {
-        wp_insert_post(array(
-            'post_title' => 'Thonj',
-            'post_content' => 'Përvojat më të bukura të thongjeve',
-            'post_type' => 'page',
-            'post_name' => 'nails',
-            'post_status' => 'publish',
-            'page_template' => 'nails.php'
-        ));
+    // Create service pages with templates
+    $pages = array(
+        'nails' => array('title' => 'Thonj', 'template' => 'nails.php'),
+        'floke' => array('title' => 'Flokë', 'template' => 'floke.php'),
+        'makeup' => array('title' => 'Makeup', 'template' => 'makeup.php'),
+        'skincare' => array('title' => 'Skincare', 'template' => 'skincare.php'),
+        'contact' => array('title' => 'Kontakto', 'template' => 'template-contact.php')
+    );
+    
+    foreach ($pages as $slug => $page_data) {
+        if (!get_page_by_path($slug, OBJECT, 'page')) {
+            wp_insert_post(array(
+                'post_type' => 'page',
+                'post_title' => $page_data['title'],
+                'post_name' => $slug,
+                'post_content' => 'Kontaktoni sallonin tonë',
+                'post_status' => 'publish',
+                'post_author' => 1,
+                'page_template' => $page_data['template']
+            ));
+            $rewrite_needed = true;
+        }
     }
     
-    flush_rewrite_rules();
-}
-add_action('after_switch_theme', 'beauty_salon_flush_rewrite_rules');
+    if ($rewrite_needed && !wp_doing_ajax()) {
+        flush_rewrite_rules(false);
+    }
+}, 99);
 
 
 
@@ -276,3 +284,70 @@ function beauty_salon_widgets_init() {
     ));
 }
 add_action('widgets_init', 'beauty_salon_widgets_init');
+
+// Ensure rewrite rules are flushed and categories exist on each page load for debugging
+add_action('admin_init', function() {
+    $option = get_option('beauty_salon_rewrite_flushed');
+    $time = time();
+    
+    if (!$option || ($time - $option) > 604800) { // 7 days
+        beauty_salon_setup();
+        register_beauty_features();
+        
+        // Create categories
+        $categories = array(
+            'thonj' => array('name' => 'Thonj', 'description' => 'Shërbime të thongjeve'),
+            'floke' => array('name' => 'Flokë', 'description' => 'Shërbime të flokëve'),
+            'makeup' => array('name' => 'Makeup', 'description' => 'Shërbime të makeup-it'),
+            'skincare' => array('name' => 'Skincare', 'description' => 'Shërbime të kujdesit të lëkurës')
+        );
+        
+        foreach ($categories as $slug => $data) {
+            if (!term_exists($slug, 'kategoria_sherbimit')) {
+                wp_insert_term($data['name'], 'kategoria_sherbimit', array(
+                    'slug' => $slug,
+                    'description' => $data['description']
+                ));
+            }
+        }
+        
+        flush_rewrite_rules(false);
+        update_option('beauty_salon_rewrite_flushed', $time);
+    }
+});
+
+// One-time front-end repair: ensure contact page exists and flush rewrites
+add_action('init', function() {
+    if (get_option('finalproject2_contact_repair_done')) {
+        return;
+    }
+
+    // Make sure CPTs/taxonomies are registered before creating pages
+    if (function_exists('register_beauty_features')) {
+        register_beauty_features();
+    }
+
+    // Create contact page if missing
+    if (!get_page_by_path('contact', OBJECT, 'page')) {
+        wp_insert_post(array(
+            'post_type' => 'page',
+            'post_title' => 'Kontakto',
+            'post_name' => 'contact',
+            'post_content' => 'Kontaktoni sallonin tonë',
+            'post_status' => 'publish',
+            'post_author' => 1,
+            'page_template' => 'template-contact.php'
+        ));
+    }
+
+    // Flush rewrite rules once to ensure pretty permalinks resolve
+    flush_rewrite_rules(false);
+    update_option('finalproject2_contact_repair_done', time());
+}, 20);
+add_action('pre_get_posts', function($q){
+    if(!is_admin() && $q->is_search()){
+        $q->set('post_type','sherbimet');
+    }
+});
+
+

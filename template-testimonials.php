@@ -115,7 +115,7 @@ get_header(); ?>
     <div style="background: linear-gradient(135deg, var(--pink) 0%, #fff 100%); padding: 50px; border-radius: 12px; text-align: center; margin-top: 60px;">
         <h3 style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; margin-top: 0;">Doni t'i Bëni Një Përvojë?</h3>
         <p style="color: #666; margin-bottom: 20px;">Rezervoni tani dhe merrni shërbimin e parë me zbritje 10%</p>
-        <a href="<?php echo home_url('/contact'); ?>" class="btn-gold" style="padding: 12px 30px; font-size: 1.05rem;">Rezervo Tani</a>
+        <a href="<?php echo esc_url( home_url('/contact/') ); ?>" class="btn-gold" style="padding: 12px 30px; font-size: 1.05rem;">Rezervo Tani</a>
     </div>
 </div>
 

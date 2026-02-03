@@ -22,14 +22,14 @@ get_header(); ?>
         <div class="services-grid">
             <?php
             $nails_images = array(
-                array('file' => 'french.jpg', 'title' => 'French Design', 'desc' => 'Dizajn klasik francez me stil sopran'),
-                array('file' => 'gishta.jpg', 'title' => 'Gishta Artistike', 'desc' => 'Art imazheri dhe ngjyra të kombinuara'),
-                array('file' => 'nails.jpg', 'title' => 'Nails Elegante', 'desc' => 'Stile moderne dhe të sofistikuara'),
-                array('file' => 'thoj.jpg', 'title' => 'Thoj i Shkurtër', 'desc' => 'Formim dhe kultura të përsosura')
+                array('file' => 'french.png', 'title' => 'French Design', 'desc' => 'Dizajn klasik francez me stil sopran'),
+                array('file' => 'gishta.png', 'title' => 'Gishta Artistike', 'desc' => 'Art imazheri dhe ngjyra të kombinuara'),
+                array('file' => 'nails.png', 'title' => 'Nails Elegante', 'desc' => 'Stile moderne dhe të sofistikuara'),
+                array('file' => 'thoj.png', 'title' => 'Thoj i Shkurtër', 'desc' => 'Formim dhe kultura të përsosura')
             );
             
             foreach ($nails_images as $item) {
-                $image_url = home_url('/wp-content/themes/finalproject/finalproject/nails/' . $item['file']);
+$image_url = get_template_directory_uri() . '/nails/' . $item['file'];
                 ?>
                 <div class="service-card" style="border: 2px solid #ffc0e0; overflow: hidden; box-shadow: 0 6px 20px rgba(201, 74, 138, 0.15);">
                     <div style="position: relative; overflow: hidden; height: 300px;">
@@ -160,7 +160,7 @@ get_header(); ?>
     <div style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); padding: 50px 20px; border-radius: 12px; text-align: center;">
         <h3 style="font-family: 'Playfair Display', serif; color: #b5838d; font-size: 2rem; margin-top: 0;">Rezervoni Shërbimin Tuaj Sot</h3>
         <p style="color: #666; margin-bottom: 20px; font-size: 1.1rem;">Merrni një përvojë të paharrueshme të bukurisë!</p>
-        <a href="<?php echo home_url('/contact'); ?>" class="btn-gold" style="padding: 15px 40px; font-size: 1.1rem; display: inline-block; text-decoration: none; border-radius: 5px; background: var(--gold); color: white;">📞 Kontakto Për Rezervim</a>
+        <a href="<?php echo esc_url( home_url('/contact/') ); ?>" class="btn-gold" style="padding: 15px 40px; font-size: 1.1rem; display: inline-block; text-decoration: none; border-radius: 5px; background: var(--gold); color: white;">📞 Kontakto Për Rezervim</a>
     </div>
 </div>
 

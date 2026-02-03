@@ -99,7 +99,7 @@ get_header(); ?>
     <div style="background: #f9f9f9; padding: 40px; border-radius: 12px; margin-top: 50px; text-align: center;">
         <h3 style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; margin-top: 0;">Rezervoni Tani</h3>
         <p style="color: #666; margin-bottom: 20px;">Merrni një përvojë të paharrueshme të bukurisë</p>
-        <a href="<?php echo home_url('/contact'); ?>" class="btn-gold" style="padding: 12px 30px; font-size: 1.05rem;">Kontakto Për Rezervim</a>
+        <a href="<?php echo esc_url( home_url('/contact/') ); ?>" class="btn-gold" style="padding: 12px 30px; font-size: 1.05rem;">Kontakto Për Rezervim</a>
     </div>
 </div>
 

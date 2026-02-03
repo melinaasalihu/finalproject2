@@ -3,6 +3,44 @@
  * Template Name: Contact Us
  * Contact form and salon information
  */
+
+// Process contact form
+$form_submitted = false;
+$form_error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'])) {
+    // Sanitize inputs
+    $name = sanitize_text_field($_POST['name'] ?? '');
+    $email = sanitize_email($_POST['email'] ?? '');
+    $phone = sanitize_text_field($_POST['phone'] ?? '');
+    $service = sanitize_text_field($_POST['service'] ?? '');
+    $message = sanitize_textarea_field($_POST['message'] ?? '');
+    
+    // Validate required fields
+    if (empty($name) || empty($email) || empty($service) || empty($message)) {
+        $form_error = 'Ju lutemi plotësoni të gjitha fushat e detyrueshme.';
+    } elseif (!is_email($email)) {
+        $form_error = 'Ju lutemi vendosni një adresë email të vlefshme.';
+    } else {
+        // Send email
+        $to = get_option('admin_email');
+        $subject = 'Kërkesa e Kontaktit: ' . esc_html($service);
+        $body = "Emri: " . esc_html($name) . "\n";
+        $body .= "Email: " . esc_html($email) . "\n";
+        $body .= "Telefoni: " . esc_html($phone) . "\n";
+        $body .= "Shërbimi: " . esc_html($service) . "\n";
+        $body .= "Mesazhi:\n" . esc_html($message);
+        
+        $headers = array('Content-Type: text/plain; charset=UTF-8', 'From: ' . esc_html($email));
+        
+        if (wp_mail($to, $subject, $body, $headers)) {
+            $form_submitted = true;
+        } else {
+            $form_error = 'Ndodhi një gabim gjatë dërgimit. Ju lutemi provoni përsëri.';
+        }
+    }
+}
+
 get_header(); ?>
 
 <section style="background: linear-gradient(135deg, var(--pink) 0%, #fff 100%); padding: 60px 20px;">
@@ -21,14 +59,18 @@ get_header(); ?>
             <h2 style="font-family: 'Playfair Display', serif; color: var(--gold); margin-bottom: 30px;">Dërgoni Mesazhin</h2>
             
             <!-- Success Message -->
-            <?php
-            if (isset($_SESSION['contact_form_success']) && $_SESSION['contact_form_success']) {
-                echo '<div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                    ✓ Mesazhi juaj u dërgua me sukses! Do t\'ju kontaktojmë sa më shpejt.
-                </div>';
-                unset($_SESSION['contact_form_success']);
-            }
-            ?>
+            <?php if ($form_submitted) : ?>
+                <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                    ✓ Mesazhi juaj u dërgua me sukses! Do t'ju kontaktojmë sa më shpejt.
+                </div>
+            <?php endif; ?>
+            
+            <!-- Error Message -->
+            <?php if (!empty($form_error)) : ?>
+                <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                    ⚠️ <?php echo esc_html($form_error); ?>
+                </div>
+            <?php endif; ?>
 
             <form method="POST" style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
                 <div style="margin-bottom: 20px;">

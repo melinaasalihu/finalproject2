@@ -34,8 +34,8 @@ get_header(); ?>
             <a href="<?php echo home_url(); ?>" class="btn-gold" style="padding: 15px 20px; background: var(--gold); color: white; text-decoration: none; border-radius: 5px; display: block;">
                 ← Kthehu në Ballina
             </a>
-            <a href="<?php echo home_url('/sherbimet'); ?>" class="btn-gold" style="padding: 15px 20px; background: var(--gold); color: white; text-decoration: none; border-radius: 5px; display: block;">
-                Shërbime →
+            <a href="<?php echo home_url('/nails'); ?>" class="btn-gold" style="padding: 15px 20px; background: var(--gold); color: white; text-decoration: none; border-radius: 5px; display: block;">
+                Thonj
             </a>
             <a href="<?php echo home_url('/contact'); ?>" class="btn-gold" style="padding: 15px 20px; background: var(--gold); color: white; text-decoration: none; border-radius: 5px; display: block;">
                 Kontakto Nesh

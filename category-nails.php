@@ -8,28 +8,33 @@ get_header(); ?>
     <div class="container">
         <h1 style="font-family: 'Playfair Display', serif; color: #c94a8a; font-size: 3.5rem; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">💅 Shërbime Nails</h1>
         <p style="font-size: 1.3rem; color: #666; margin-top: 15px; font-weight: 300;">Kujdesi premium për thonjtë e shëndetshëm dhe bukur</p>
-        <p style="font-size: 1rem; color: #999; margin-top: 10px;">Dizajne të personalizuara me produkte të cilësisë së lartë</p>
+        <p style="font-size: 1rem; color: #999; margin-top: 10px;">Dizajne të personalizuara me produkte të cilësisë së lartë - manikyri, gel, aksesore</p>
     </div>
 </section>
 
 <div class="container py-5">
-    <div style="max-width: 800px; margin: 0 auto 40px; text-align: center;">
-        <h2 class="section-title">Pse Të Zgjerdhni Shërbimin Tonë?</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px;">
-            <div style="padding: 20px; background: #f9f9f9; border-radius: 10px;">
-                <div style="font-size: 2rem; margin-bottom: 10px;">💅</div>
-                <h4 style="color: var(--gold);">Dizajne Inovative</h4>
-                <p style="color: #666; margin: 0;">Stile të fundit dhe ngjyra trendy</p>
+    <div style="max-width: 1000px; margin: 0 auto 40px;">
+        <h2 class="section-title" style="text-align: center;">Çfarë Përfshihet në Shërbimin Tonë?</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 30px;">
+            <div style="padding: 25px; background: #ffe6f0; border-radius: 12px; border-left: 4px solid #c94a8a;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">✨</div>
+                <h4 style="color: #c94a8a; margin: 10px 0;">Dizajne Inovative</h4>
+                <p style="color: #666; margin: 0; font-size: 0.95rem;">Stile të fundit dhe ngjyra trendy - French, Ombre, Glitter etj.</p>
             </div>
-            <div style="padding: 20px; background: #f9f9f9; border-radius: 10px;">
-                <div style="font-size: 2rem; margin-bottom: 10px;">✨</div>
-                <h4 style="color: var(--gold);">Produkte Cilësore</h4>
-                <p style="color: #666; margin: 0;">Përfundim të qëndrueshëm dhe profesional</p>
+            <div style="padding: 25px; background: #ffe6f0; border-radius: 12px; border-left: 4px solid #c94a8a;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">💎</div>
+                <h4 style="color: #c94a8a; margin: 10px 0;">Produkte Premium</h4>
+                <p style="color: #666; margin: 0; font-size: 0.95rem;">Lakra dhe gel të importuar - qëndron deri 4 javë pa dëmtim.</p>
             </div>
-            <div style="padding: 20px; background: #f9f9f9; border-radius: 10px;">
-                <div style="font-size: 2rem; margin-bottom: 10px;">👨‍💼</div>
-                <h4 style="color: var(--gold);">Meister Profesional</h4>
-                <p style="color: #666; margin: 0;">Artizanë të përvojuar dhe të çertifikuar</p>
+            <div style="padding: 25px; background: #ffe6f0; border-radius: 12px; border-left: 4px solid #c94a8a;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">👑</div>
+                <h4 style="color: #c94a8a; margin: 10px 0;">Ekspertë Të Përvojuar</h4>
+                <p style="color: #666; margin: 0; font-size: 0.95rem;">Meister të çertifikuar me më shumë se 10 vite përvojë.</p>
+            </div>
+            <div style="padding: 25px; background: #ffe6f0; border-radius: 12px; border-left: 4px solid #c94a8a;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">🧴</div>
+                <h4 style="color: #c94a8a; margin: 10px 0;">Kujdesi i Plotë</h4>
+                <p style="color: #666; margin: 0; font-size: 0.95rem;">Massage, tratim, polim dhe aksesore të ndryshme për thonj.</p>
             </div>
         </div>
     </div>
@@ -57,11 +62,19 @@ get_header(); ?>
                 while($services->have_posts()) {
                     $services->the_post(); ?>
                     <div class="service-card">
-                        <?php if(has_post_thumbnail()) the_post_thumbnail('salon-medium'); ?>
-                        <div class="p-3">
+                        <div class="card-img">
+                            <?php 
+                            if(has_post_thumbnail()) {
+                                the_post_thumbnail('salon-medium', array('alt' => get_the_title()));
+                            } else {
+                                echo '<div style="width: 100%; height: 200px; background: linear-gradient(135deg, #ffe6f0 0%, #ffd4e5 100%); display: flex; align-items: center; justify-content: center; color: #c94a8a; font-size: 3rem;">💅</div>';
+                            }
+                            ?>
+                        </div>
+                        <div class="card-text">
                             <h3><?php the_title(); ?></h3>
                             <?php the_excerpt(); ?>
-                            <a href="<?php the_permalink(); ?>" class="btn-gold">Shiko Detajet</a>
+                            <a href="<?php the_permalink(); ?>" class="read-more">Shiko Detajet →</a>
                         </div>
                     </div>
                     <?php
@@ -153,31 +166,36 @@ get_header(); ?>
         </div>
     </div>
 
-    <div style="background: #f5f5f5; padding: 50px 20px; margin-top: 50px; border-radius: 12px; text-align: center;">
-        <h2 class="section-title">Këshilla për Kujdesin e Thongjeve</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px;">
-            <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+    <div style="background: #ffe6f0; padding: 50px 20px; margin-top: 50px; border-radius: 12px; text-align: center;">
+        <h2 class="section-title" style="color: #c94a8a;">Këshilla Të Rëndësishme për Kujdesin e Thongjeve</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-top: 30px;">
+            <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-top: 3px solid #c94a8a;">
                 <div style="font-size: 2.5rem; margin-bottom: 10px;">💧</div>
-                <h4 style="color: var(--gold); margin-bottom: 10px;">Hidroz Rregullishta</h4>
-                <p style="color: #666; margin: 0;">Përdor hidrator për thonjtë dhe lëkurën pranë tyre</p>
+                <h4 style="color: #c94a8a; margin-bottom: 10px;">Laga e Rregullt</h4>
+                <p style="color: #666; margin: 0; line-height: 1.5;">Përdor krem hidratuesit çdo ditë për thonjtë dhe lëkurën.</p>
             </div>
-            <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-top: 3px solid #c94a8a;">
                 <div style="font-size: 2.5rem; margin-bottom: 10px;">✂️</div>
-                <h4 style="color: var(--gold); margin-bottom: 10px;">Manicura e Rregullit</h4>
-                <p style="color: #666; margin: 0;">Bisefi thonjtë çdo 3-4 javë</p>
+                <h4 style="color: #c94a8a; margin-bottom: 10px;">Manicura Rregullore</h4>
+                <p style="color: #666; margin: 0; line-height: 1.5;">Bisefi thonjtë çdo 3-4 javë për shëndet optimal.</p>
             </div>
-            <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-top: 3px solid #c94a8a;">
                 <div style="font-size: 2.5rem; margin-bottom: 10px;">🛡️</div>
-                <h4 style="color: var(--gold); margin-bottom: 10px;">Shtytja Katekulash</h4>
-                <p style="color: #666; margin: 0;">Mos prel katekulat, vetëm shtytje</p>
+                <h4 style="color: #c94a8a; margin-bottom: 10px;">Mbrojtja e Katekulave</h4>
+                <p style="color: #666; margin: 0; line-height: 1.5;">Mos prel katekulat, vetëm shtytje butë.</p>
+            </div>
+            <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-top: 3px solid #c94a8a;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">🧤</div>
+                <h4 style="color: #c94a8a; margin-bottom: 10px;">Mbrojtje nga Kimikate</h4>
+                <p style="color: #666; margin: 0; line-height: 1.5;">Përdor doreza kur pastrohesh ose bën puna të rëndë.</p>
             </div>
         </div>
     </div>
 
-    <div style="background: #f9f9f9; padding: 50px 20px; border-radius: 12px; margin-top: 50px; text-align: center;">
-        <h3 style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2rem; margin-top: 0;">Rezervoni Shërbimin Tuaj Sot</h3>
-        <p style="color: #666; margin-bottom: 20px; font-size: 1.1rem;">Merrni një përvojë të paharrueshme të bukurisë!</p>
-        <a href="<?php echo home_url('/contact'); ?>" class="btn-gold" style="padding: 15px 40px; font-size: 1.1rem; display: inline-block; text-decoration: none; border-radius: 5px;">📞 Kontakto Për Rezervim</a>
+    <div style="background: linear-gradient(135deg, #ffe6f0 0%, #ffd4e5 100%); padding: 50px 20px; border-radius: 12px; margin-top: 50px; text-align: center;">
+        <h3 style="font-family: 'Playfair Display', serif; color: #c94a8a; font-size: 2rem; margin-top: 0;">Rezervoni Shërbimin Tuaj Sot</h3>
+        <p style="color: #666; margin-bottom: 20px; font-size: 1.1rem;">Merrni një përvojë të paharrueshme të bukurisë me thonj të bukur!</p>
+        <a href="<?php echo esc_url( home_url('/contact/') ); ?>" class="btn-gold" style="padding: 15px 40px; font-size: 1.1rem; display: inline-block; text-decoration: none; border-radius: 5px;">📞 Kontakto Për Rezervim</a>
     </div>
 </div>
 

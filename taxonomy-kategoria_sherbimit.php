@@ -1,53 +1,69 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Generic Taxonomy Archive Template for kategoria_sherbimit
+ */
+get_header(); 
+
+$term = get_queried_object();
+$term_name = $term->name ?? 'Kategori';
+$term_slug = $term->slug ?? '';
+?>
+
+<section class="category-hero" style="background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%); padding: 60px 20px; text-align: center;">
+    <div class="container">
+        <h1 style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 3rem; margin: 0;">
+            <?php echo esc_html($term_name); ?>
+        </h1>
+        <?php if (!empty($term->description)) : ?>
+            <p style="font-size: 1.2rem; color: #666; margin-top: 15px;">
+                <?php echo wp_kses_post($term->description); ?>
+            </p>
+        <?php endif; ?>
+    </div>
+</section>
+
 <div class="container py-5">
     <a href="<?php echo home_url(); ?>" style="text-decoration:none; color:#b5838d; display: inline-block; margin-bottom: 20px;">&larr; Kthehu te Dashboard</a>
-    
-    <h1 class="section-title"><?php single_term_title(); ?></h1>
-    
-    <?php 
-    // Display category description if available
-    $term = get_queried_object();
-    if (!empty($term->description)) {
-        echo '<div style="text-align: center; max-width: 600px; margin: 0 auto 40px; color: #666;">' . wp_kses_post($term->description) . '</div>';
-    }
-    
-    // Add special gallery for nails category
-    if ($term->slug === 'thonj') {
-        echo '<div style="margin-bottom: 50px;">';
-        echo '<h2 style="text-align: center; color: var(--gold); font-size: 2rem; margin-bottom: 30px;">📸 Galeria e Punimeve Tona</h2>';
-        echo '<div class="services-grid">';
-        
-        $nails_images = array('french.jpg', 'gishta.jpg', 'nails.jpg', 'thoj.jpg');
-        foreach ($nails_images as $image) {
-            $image_path = home_url('/wp-content/themes/finalproject/finalproject/nails/' . $image);
-            echo '<div class="service-card" style="cursor: pointer; overflow: hidden;">';
-            echo '<img src="' . esc_url($image_path) . '" alt="' . esc_attr($image) . '" style="width: 100%; height: 280px; object-fit: cover; border-radius: 10px;">';
-            echo '<div class="p-3" style="text-align: center;">';
-            echo '<h4 style="color: var(--gold); margin: 10px 0;">💅 ' . ucfirst(str_replace('.jpg', '', $image)) . '</h4>';
-            echo '<p style="color: #666; font-size: 0.9rem; margin: 5px 0;">Dizajn profesional me produkte cilësore</p>';
-            echo '</div>';
-            echo '</div>';
-        }
-        
-        echo '</div>';
-        echo '</div>';
-    }
-    ?>
-    
-    <div class="services-grid">
-        <?php if(have_posts()) : 
-            echo '<h2 style="grid-column: 1 / -1; text-align: center; color: var(--gold); margin-top: 30px;">Shërbimet e Disponueshme</h2>';
-            while(have_posts()) : the_post(); ?>
-            <div class="service-card">
-                <?php if(has_post_thumbnail()) { 
-                    the_post_thumbnail('salon-medium', array('style' => 'width: 100%; height: 250px; object-fit: cover;')); 
-                } else {
-                    echo '<div style="width: 100%; height: 250px; background: linear-gradient(135deg, #ffe6f0 0%, #ffd4e5 100%); display: flex; align-items: center; justify-content: center; color: #c94a8a; font-size: 3rem;">💅</div>';
-                } ?>
-                <div class="p-3" style="padding: 15px;">
-                    <h3 style="color: var(--gold); margin: 10px 0;"><?php the_title(); ?></h3>
-                    <?php the_excerpt(); ?>
-                    <a href="<?php the_permalink(); ?>" class="btn-gold" style="display: inline-block; padding: 10px 20px; background: var(--gold); color: white; text-decoration: none; border-radius: 5px; margin-top: 10px;">Shiko Detajet</a>
+
+    <div style="border-top: 2px solid #eee; padding-top: 40px;">
+        <h2 class="section-title">Shërbime të Disponueshme</h2>
+        <div class="services-grid">
+            <?php
+            if (have_posts()) :
+                while (have_posts()) : the_post(); ?>
+                    <div class="service-card">
+                        <div class="card-img">
+                            <?php 
+                            if(has_post_thumbnail()) {
+                                the_post_thumbnail('salon-medium', array('alt' => get_the_title()));
+                            } else {
+                                echo '<div style="width: 100%; height: 200px; background: linear-gradient(135deg, #ffe6f0 0%, #ffd4e5 100%); display: flex; align-items: center; justify-content: center; color: #c94a8a; font-size: 3rem;">💅</div>';
+                            }
+                            ?>
+                        </div>
+                        <div class="card-text">
+                            <h3><?php the_title(); ?></h3>
+                            <?php the_excerpt(); ?>
+                            <a href="<?php the_permalink(); ?>" class="read-more">Shiko Detajet →</a>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else : ?>
+                <p style="grid-column: 1/-1; text-align: center; font-size: 1.1rem; color: #666;">
+                    Nuk ka shërbime në këtë kategori akoma.
+                </p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div style="background: linear-gradient(135deg, #fff9e6 0%, #fff0cc 100%); padding: 40px; border-radius: 12px; margin-top: 50px; text-align: center;">
+        <h3 style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; margin-top: 0;">Interesuar për Këtë Shërbim?</h3>
+        <p style="color: #666; margin-bottom: 20px;">Kontaktoni sallonin tonë për më shumë informacion ose për të bërë një rezervim.</p>
+        <a href="<?php echo home_url('/contact'); ?>" class="btn-gold" style="padding: 12px 30px; font-size: 1.05rem; text-decoration: none; display: inline-block;">Kontakto Tani</a>
+    </div>
+</div>
+
+<?php get_footer(); ?>
                 </div>
             </div>
         <?php endwhile; 

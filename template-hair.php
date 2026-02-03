@@ -227,7 +227,7 @@ get_header(); ?>
     <div style="background: #f9f9f9; padding: 50px 20px; border-radius: 12px; margin-top: 50px; text-align: center;">
         <h3 style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2rem; margin-top: 0;">Rezervoni Shërbimin Tuaj Sot</h3>
         <p style="color: #666; margin-bottom: 20px; font-size: 1.1rem;">Transformimi i flokëve tuaj fillon këtu!</p>
-        <a href="<?php echo home_url('/contact'); ?>" class="btn-gold" style="padding: 15px 40px; font-size: 1.1rem; display: inline-block; text-decoration: none; border-radius: 5px;">📞 Kontakto Për Rezervim</a>
+        <a href="<?php echo esc_url( home_url('/contact/') ); ?>" class="btn-gold" style="padding: 15px 40px; font-size: 1.1rem; display: inline-block; text-decoration: none; border-radius: 5px;">📞 Kontakto Për Rezervim</a>
         <p style="color: #999; margin-top: 20px; font-size: 0.9rem;">Ose na telefononi: <strong style="color: #666;">+355 XX XXX XXXX</strong></p>
     </div>
 </div>

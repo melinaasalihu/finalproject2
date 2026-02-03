@@ -16,7 +16,7 @@
         <div class="dashboard-grid">
             <?php
             $categories = array(
-                'thonj'    => array('titulli' => 'Thonj', 'icon' => '💅', 'color' => 'pink', 'url' => '/lloj-sherbimi/nails/'),
+                'thonj'    => array('titulli' => 'Thonj', 'icon' => '💅', 'color' => 'pink', 'url' => '/nails/'),
                 'floke'    => array('titulli' => 'Flokë', 'icon' => '✂️', 'color' => 'gold', 'url' => '/lloj-sherbimi/floke/'),
                 'makeup'   => array('titulli' => 'Makeup', 'icon' => '💄', 'color' => 'dark', 'url' => '/lloj-sherbimi/makeup/'),
                 'skincare' => array('titulli' => 'Skincare', 'icon' => '✨', 'color' => 'soft', 'url' => '/lloj-sherbimi/skincare/')
@@ -25,8 +25,8 @@
             foreach ($categories as $slug => $data) {
                 $link = home_url($data['url']); 
                 ?>
-                <a href="<?php echo esc_url($link); ?>" class="dash-item <?php echo esc_attr($data['color']); ?>">
-                    <span class="dash-icon"><?php echo $data['icon']; ?></span>
+                <a href="<?php echo esc_url($link); ?>" class="dash-item <?php echo esc_attr($data['color']); ?>" role="button" aria-label="<?php echo esc_attr($data['titulli']); ?>">
+                    <span class="dash-icon" aria-hidden="true"><?php echo $data['icon']; ?></span>
                     <h3><?php echo esc_html($data['titulli']); ?></h3>
                     <p>Kliko për shërbimet</p>
                 </a>
